@@ -16,7 +16,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <style>
             .stud{
-                width: 50%;
+                width: 80%;
                 left:7%;
 
             }
@@ -32,10 +32,10 @@ and open the template in the editor.
                 margin: 2px 2px;
 
                 width: 150px;
+                position: relative;
 
 
-
-
+                bottom: 50%;
 
 
             }
@@ -79,7 +79,6 @@ and open the template in the editor.
         GROUP BY subId,id";
         $result = mysqli_query($con, $sql);
         $j = 1;
-        $i = 1;
 
         $prev_subject = NULL;
 
@@ -129,75 +128,79 @@ and open the template in the editor.
                     $prev_subject = $Subject_id;
                 } else {
                     ?>
-                    <div class="form-group ">
-                        <table class="table  table-striped table-hover " id="table(<?php echo $i++ ?>)">
-                            <div class="leftbox">
-                                <label><b> Subject:</b></label>
-                                <input  type="text "   value="<?php echo $sub; ?>" readonly>
+                    <form class=" card stud   shadow-lg p-3 mb-5 bg-white rounded">
 
-                            </div>
+                        <div class="form-group my-2 " >
+                            <table class="table table-striped table-hover " id="<?php echo $Subject_id ?>">
+                                <div class="leftbox">
+                                    <label><b> Subject:</b></label>
+                                    <input  type="text "   value="<?php echo $sub; ?>" readonly>
 
-                            <div class="leftbox px-3">
-                                <label ><b> Total Class:</b></label>
-                                <input class="text" type="text "   value="<?php echo $pe['total_class']; ?>" readonly>
-                                <br>
-                            </div>
-                            <div>
-                                <a class="button btn-secondary" id="printPageButton" href="javascript:void(0);" onclick="printPage();">Print</a>
-                            </div>
+                                </div>
 
-                            <thead>
-                                <tr>
-                                    <th scope=col>S.NO</th>
+                                <div class="leftbox ">
+                                    <label ><b> Total Class:</b></label>
+                                    <input class="text" type="text "   value="<?php echo $pe['total_class']; ?>" readonly>
+                                    <br>
+                                </div>
+                                <div style="align-content: left">
+                                    <a class="button btn-secondary" id="printPageButton" href="javascript:void();" onclick="printPage(<?php echo $Subject_id ?>);">Print</a>
+                                </div>
 
-                                    <th scope=col>Student Name</th>
-                                    <th scope=col>Total Attedence</th>
-                                    <th scope=col>Percentage</th>
+                                <thead>
+                                    <tr>
+                                        <th scope=col>S.NO</th>
 
-                                </tr>
-                            </thead>
+                                        <th scope=col>Student Name</th>
+                                        <th scope=col>Total Attedence</th>
+                                        <th scope=col>Percentage</th>
 
-                            <tbody>
+                                    </tr>
+                                </thead>
 
-                                <tr>
-                                    <td ><?php echo $j++ ?> </td>
+                                <tbody>
 
-                                    <td  value="<?php echo $row['id']; ?>"><?php echo $row['Name']; ?> </td>
+                                    <tr>
+                                        <td ><?php echo $j++ ?> </td>
 
-                                    <td ><?php echo $sum ?></td>
+                                        <td  value="<?php echo $row['id']; ?>"><?php echo $row['Name']; ?> </td>
 
-                                    <td ><?php echo $percentage ?>%</td>
-                                </tr>
-                                <?php
-                                $prev_subject = $Subject_id;
+                                        <td ><?php echo $sum ?></td>
+
+                                        <td ><?php echo $percentage ?>%</td>
+                                    </tr>
+                                    <?php
+                                    $prev_subject = $Subject_id;
+                                }
                             }
                         }
-                    }
-                    ?>
-                </tbody>
-                <?php
-            }
-            ?>
-        </table>
+                        ?>
+                    </tbody>
+                    <?php
+                }
+                ?>
+
+            </table>
 
 
 
 
-    </div>
 
+        </div>
+    </form>
     <script type="text/javascript">
-        function printPage() {
-            for (int i = 1; i < n; i++) {
-                var tableData = '<table border="1">' + document.getElementById("table(i)")[0].innerHTML + '</table>';
-                var data = '<button id="printPageButton" onclick="window.print()">Print this page</button>' + tableData;
-                myWindow = window.open('', '', 'width=800,height=600');
-                myWindow.innerWidth = screen.width;
-                myWindow.innerHeight = screen.height;
-                myWindow.screenX = 0;
-                myWindow.screenY = 0;
-                myWindow.document.write(data);
-                myWindow.focus();
-            }
+        function printPage(id) {
+            //            alert("Reached till here" + id);
+
+            var tableData = '<table border="1">' + document.getElementById(id).innerHTML + '</table>';
+            var data = '<button id="printPageButton" onclick="window.print()">Print this page</button>' + tableData;
+            myWindow = window.open('', '', 'width=800,height=600');
+            myWindow.innerWidth = screen.width;
+            myWindow.innerHeight = screen.height;
+            myWindow.screenX = 0;
+            myWindow.screenY = 0;
+            myWindow.document.write(data);
+            myWindow.focus();
         }
         ;
     </script>
