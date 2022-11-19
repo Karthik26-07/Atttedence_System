@@ -1,39 +1,6 @@
-<?php
-session_start();
 
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST['userid'])) {
-        $name_error = " Name Required";
-    } else {
-        $Userid = $_POST ['userid'];
-    }
-    if (empty($_POST['password'])) {
-        $pass_error = "Password  is required";
-//        $msgEncoded2 = base64_encode($msg2);
-//        header("location:Adminlogin.php?msg2=" . $msgEncoded2);
-    } else {
-        $Password = $_POST['password']; //Accesing input from the login form
-    }
-
-
-
-
-    if ($Userid == root && $Password == root) {
-        $_SESSION['Userid'] = $Userid;
-        $_SESSION['Password'] = $Password;
-        header("location:Adminpage.php?");
-        exit();
-    } else {
-        $msg = "Invalid user id or Password";
-        $msgEncoded = base64_encode($msg);
-        header("location:Adminlogin.php?msg=" . $msgEncoded);
-
-        exit();
-    }
-}
-?>
 
 <!doctype html>
 <html>
@@ -49,10 +16,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 left:25%;
 
             }
+            .error {color: #FF0001;}
         </style>
 
     </head>
     <body>
+        <?php
+        session_start();
+
+        $name_error = $msg = $pass_error = "";
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (empty($_POST['userid'])) {
+                $name_error = " Name Required";
+            } else {
+                $Userid = $_POST ['userid'];
+            }
+            if (empty($_POST['password'])) {
+                $pass_error = "Password  is required";
+//        $msgEncoded2 = base64_encode($msg2);
+//        header("location:Adminlogin.php?msg2=" . $msgEncoded2);
+            } else {
+                $Password = $_POST['password']; //Accesing input from the login form
+            }
+        }
+        ?>
         <nav class="navbar navbar-light bg-info">
             <span class="navbar-brand mb-0 h1">Admin Login</span>
         </nav>
@@ -67,8 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             <div class="form-group">
+
                 <label for="inputphonenumber">User id</label>
-                <input type="text" class="form-control" id="exampleInputphone" name="userid" required >
+                <input type="text" class="form-control" id="exampleInputphone" name="userid"  >
+                <span class="error"> <?php echo $name_error; ?> </span>
 
 
 
@@ -78,8 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
 
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="password" required >
+                <input type="password" class="form-control" id="exampleInputPassword1" name="password"  >
 
+                <span class="error"> <?php echo $pass_error; ?> </span>
 
             </div>
             <div class="text-danger">
@@ -91,11 +82,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
                 ?>
+                <!--<span class="error"> <?php echo $msg; ?> </span>-->
+
             </div>
             <button class="btn btn-primary my-2 btn-1g" name="submit"type="submit">Login</button>
 
         </form>
+        <?php
+        if (isset($_POST['submit'])) {
+            if ($name_error == "" && $pass_error == "") {
 
+                if ($Userid == root && $Password == root) {
+                    $_SESSION['Userid'] = $Userid;
+                    $_SESSION['Password'] = $Password;
+                    header("location:Adminpage.php?");
+                    exit();
+                } else {
+                    $msg = "Invalid user id or Password";
+                    $msgEncoded = base64_encode($msg);
+                    header("location:Adminlogin.php?msg=" . $msgEncoded);
+////
+                }
+            } else {
+
+            }
+        }
+        ?>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

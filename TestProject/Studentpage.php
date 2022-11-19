@@ -1,29 +1,6 @@
 <?php include 'Navbar.php';
 ?>
-<?php
-include 'dbconnect.php';
 
-$Name = $Phonenumber = $Email = $Parentsphone = $Address = $Semister = $Student_password = "";
-if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POST") {
-    $Name = filter_input(INPUT_POST, 'name');
-    $Age = filter_input(INPUT_POST, 'age');
-    $Phonenumber = filter_input(INPUT_POST, 'phno');
-    $Email = filter_input(INPUT_POST, 'email');
-    $Parentsphone = filter_input(INPUT_POST, 'p_phonenum');
-    $Address = filter_input(INPUT_POST, 'address');
-    $Semister = filter_input(INPUT_POST, 'sem');
-    $Student_password = filter_input(INPUT_POST, 'password');
-    $sql = "insert into add_student(Name,Age,Email,Phonenumber,ParentPhonenum,Address,Semister,password)"
-            . "values ('$Name','$Age','$Email', '$Phonenumber','$Parentsphone','$Address','$Semister','$Student_password')";
-
-    if ($con->query($sql) === TRUE) {
-        echo "<script>alert('Succesfullly Registered');</script>";
-        echo "<script>window.location.href='Adminpage.php'</script>";
-    } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
-    }
-}
-?>
 <!DOCTYPE html>
 
 <html>
@@ -43,6 +20,8 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
                 left:7%;
 
             }
+            .error {color: #FF0001;}
+
         </style>
 
 
@@ -50,7 +29,88 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
 
 </head>
 <body>
-    <form class=" card stud my-5  shadow-lg p-3 mb-5 bg-white rounded" method="post"  action="">
+    <?php
+    $nameErr = $ageErr = $emailErr = $mobilenoErr = $parentphoneErr = $addErr = $passErr = "";
+
+    $Name = $Phonenumber = $Email = $Parentsphone = $Address = $Semister = $Student_password = "";
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+
+        if (empty($_POST["name"])) {
+            $nameErr = "Name is required";
+        } else {
+            $Name = $_POST["name"];
+            // check if name only contains letters and whitespace
+            if (!preg_match("/^[a-zA-Z ]*$/", $Name)) {
+                $nameErr = "Only alphabets and white space are allowed";
+            }
+        }
+        if (empty($_POST["age"])) {
+            $ageErr = "Age is required";
+        } else {
+            $Age = $_POST["age"];
+            // check if mobile no is well-formed
+            if (!preg_match("/^[0-9]*$/", $Age)) {
+                $ageErr = "Only numeric value is allowed.";
+            }
+        }
+        if (empty($_POST["phno"])) {
+            $mobilenoErr = "Phone no is required";
+        } else {
+            $Phonenumber = $_POST["phno"];
+            // check if mobile no is well-formed
+            if (!preg_match("/^[0-9]*$/", $Phonenumber)) {
+                $mobilenoErr = "Only numeric value is allowed.";
+            }
+            //check mobile no length should not be less and greator than 10
+            if (strlen($Phonenumber) != 10) {
+                $mobilenoErr = "Mobile no must contain 10 digits.";
+            }
+        }
+        if (empty($_POST["email"])) {
+            $emailErr = "Email is required";
+        } else {
+            $Email = $_POST["email"];
+            // check that the e-mail address is well-formed
+            if (!filter_var($Email, FILTER_VALIDATE_EMAIL)) {
+                $emailErr = "Invalid email format";
+//            }
+            }
+
+
+            if (empty($_POST["p_phonenum"])) {
+                $parentphoneErr = "Parents phone number is required";
+            } else {
+                $Parentsphone = $_POST["p_phonenum"];
+                // check if mobile no is well-formed
+                if (!preg_match("/^[0-9]*$/", $Parentsphone)) {
+                    $parentphoneErr = "Only numeric value is allowed.";
+                }
+                //check mobile no length should not be less and greator than 10
+                if (strlen($Parentsphone) != 10) {
+                    $parentphoneErr = "Mobile no must contain 10 digits.";
+                }
+            }
+            if (empty($_POST["address"])) {
+                $addErr = "Address is required";
+            } else {
+                $Address = $_POST["address"];
+            }
+
+            $Semister = $_POST["sem"];
+            if (empty($_POST["password"])) {
+                $passErr = "Password is required";
+            } else {
+                $Student_password = $_POST["password"];
+            }
+
+
+//
+        }
+    }
+    ?>
+    <form class=" card stud my-5  shadow-lg p-3 mb-5 bg-white rounded" method="post"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
         <div class="row justify-content-center align-items-center">
             <h1>Add Student</h1>
@@ -58,15 +118,20 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
 
         <div class="form-group">
             <label for="inputname">Name</label>
-            <input type="name" class="form-control" id="exampleinputname" name="name" required>
+            <input type="name" class="form-control" id="exampleinputname" name="name">
+            <span class="error"><?php echo $nameErr; ?> </span>
         </div>
         <div class="form-group">
             <label for="inputphone">Phonenumber</label>
-            <input type="phone" class="form-control" id="phno" name="phno" min="1000000000" max="9999999999" required>
+            <input type="phone" class="form-control" id="phno" name="phno" min="1000000000" max="9999999999" >
+            <span class="error"><?php echo $mobilenoErr; ?> </span>
+
         </div>
         <div class="form-group">
             <label for="inputname">Age</label>
-            <input type="name" class="form-control" id="exampleinputname" name="age" required>
+            <input type="name" class="form-control" id="exampleinputname" name="age" >
+            <span class="error"> <?php echo $ageErr; ?> </span>
+
         </div>
 
 
@@ -74,23 +139,29 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
 
         <div class="form-group">
             <label for="exampleFormControlInput1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputemail" placeholder="name@example.com" name="email" required>
+            <input type="email" class="form-control" id="exampleInputemail" placeholder="name@example.com" name="email" >
+            <span class="error"> <?php echo $emailErr; ?> </span>
+
         </div>
 
         <div class="form-group">
             <label for="inputaddress">Address</label>
-            <input type="address" class="form-control" id="exampleInputaddress" name="address" required>
+            <input type="address" class="form-control" id="exampleInputaddress" name="address">
+            <span class="error"> <?php echo $addErr; ?> </span>
+
         </div>
         <div class="form-group">
             <label for="inputphonenum">Parents Phonenumber</label>
-            <input type="parentsphone" class="form-control" id="parentsphno" name="p_phonenum" min="1000000000" max="9999999999" required>
+            <input type="parentsphone" class="form-control" id="parentsphno" name="p_phonenum" min="1000000000" max="9999999999">
+            <span class="error"> <?php echo $parentphoneErr; ?> </span>
+
         </div>
 
 
 
         <div class="form-group">
             <label for="exampleFormControlSelect1">Semester</label>
-            <select class="form-control" id="exampleFormControlSelect1" name="sem" required>
+            <select class="form-control" id="exampleFormControlSelect1" name="sem">
                 <option>1 Semester</option>
                 <option>2 Semester</option>
                 <option>3 Semester</option>
@@ -102,13 +173,35 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
         </div>
         <div class="form-group">
             <label for="inputpass">Password</label>
-            <input type="studentpass" class="form-control" id="parentspass" name="password" required>
+            <input type="studentpass" class="form-control" id="parentspass" name="password" >
+            <span class="error"><?php echo $passErr; ?> </span>
+
         </div>
 
 
-        <button class="btn btn-primary my-2 btn-1g" type="submit">Save</button>
+        <button class="btn btn-primary my-2 btn-1g" name="submit" id="submit" type="submit">Save</button>
 
     </form>
+    <?php
+    include 'dbconnect.php';
+    if (isset($_POST['submit'])) {
+        if ($nameErr == "" && $ageErr == "" && $emailErr == "" && $mobilenoErr == "" && $parentphoneErr == "" && $addErr == "" && $passErr == "") {
+
+            $sql = "insert into add_student(Name,Age,Email,Phonenumber,ParentPhonenum,Address,Semister,password)"
+                    . "values ('$Name','$Age','$Email', '$Phonenumber','$Parentsphone','$Address','$Semister','$Student_password')";
+
+            if ($con->query($sql) === TRUE) {
+                echo "<script>alert('Succesfullly Registered');</script>";
+                echo "<script>window.location.href='Adminpage.php'</script>";
+            } else {
+                echo "Error: " . $sql . "<br>" . $con->error;
+            }
+        } else {
+
+        }
+    }
+    ?>
+
 
 
 

@@ -2,26 +2,38 @@
 ?>
 
 <?php
-include 'dbconnect.php';
+$nameErr = $codeErr = $desErr = "";
 $subname = $subcode = $subsem = $subdescription = "";
-if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POST") {
-    $subname = $_POST['subjectname'];
-    $subcode = $_POST['subjectcode'];
-    $subsem = $_POST['subsemester'];
-    $subdescription = $_POST['subdescription'];
-    
-     $sql = "insert into subject_management(subName,subCode,subSemester,subDescription)"
-            . "values ('$subname','$subcode','$subsem','$subdescription')";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if ($con->query($sql) === TRUE) {
-        echo "<script>alert('Succesfullly Added');</script>";
-        echo "<script>window.location.href='Adminpage.php'</script>";
+
+
+    if (empty($_POST["subjectname"])) {
+        $nameErr = "Subject name is required";
     } else {
-        echo "Error: " . $sql . "<br>" . $con->error;
+        $subname = $_POST['subjectname'];
+
+// check if name only contains letters and whitespace
+        if (!preg_match("/^[a-zA-Z ]*$/", $subname)) {
+            $nameErr = "Only alphabets and white space are allowed";
+        }
+    }
+    if (empty($_POST["subjectcode"])) {
+        $codeErr = "Subject code is required";
+    } else {
+        $subcode = $_POST['subjectcode'];
     }
 
+    $subsem = $_POST['subsemester'];
+    if (empty($_POST["subdescription"])) {
+        $desErr = "Subject description is required";
+    } else {
+        $subdescription = $_POST['subdescription'];
+    }
 }
 ?>
+
+
 
 
 
@@ -41,23 +53,28 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
                 left:7%;
 
             }
+            .error {color: #FF0001;}
         </style>
 
     </head>
     <body>
-       
-        <form class=" card stud my-5  shadow-lg p-3 mb-5 bg-white rounded" method="post"  action="">
+
+        <form class=" card stud my-5  shadow-lg p-3 mb-5 bg-white rounded" method="post"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="row justify-content-center align-items-center">
-                <h1>Add Subject</h1>    
+                <h1>Add Subject</h1>
             </div>
 
             <div class="form-group">
                 <label for="name">Subject Name</label>
                 <input type="name" class="form-control" id="exampleFormControlInput1" name="subjectname">
+                <span class="error"><?php echo $nameErr; ?> </span>
+
             </div>
             <div class="form-group">
                 <label for="subcode">Subject Code</label>
                 <input type="subcode" class="form-control" id="exampleFormControlInput2" name="subjectcode">
+                <span class="error"><?php echo $codeErr; ?> </span>
+
             </div>
 
             <div class="form-group">
@@ -74,24 +91,32 @@ if (filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING) == "POS
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Description</label>
                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="subdescription"></textarea>
+                <span class="error"><?php echo $desErr; ?> </span>
+
             </div>
-            <button class="btn btn-primary my-2 btn-1g" type="submit">Add</button>
+            <button class="btn btn-primary my-2 btn-1g" name="add" id="add" type="submit">Add</button>
 
-        </form> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  
+        </form>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
 </html>
+<?php
+include 'dbconnect.php';
+if (isset($_POST['add'])) {
+    if ($nameErr == "" && $codeErr == "" && $desErr == "") {
+        echo "<h2>Your Password:</h2>";
+        echo "Name: " . $subname;
+        $sql = "insert into subject_management(subName,subCode,subSemester,subDescription)"
+                . "values ('$subname','$subcode','$subsem','$subdescription')";
+
+        if ($con->query($sql) === TRUE) {
+            echo "<script>alert('Succesfullly Added');</script>";
+            echo "<script>window.location.href='Adminpage.php'</script>";
+        } else {
+            echo "Error: " . $sql . "<br>" . $con->error;
+        }
+    } else {
+        
+    }
+}
+?>
