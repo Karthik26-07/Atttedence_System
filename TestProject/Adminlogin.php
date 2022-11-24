@@ -29,15 +29,14 @@
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (empty($_POST['userid'])) {
                 $name_error = " Name Required";
-            } else {
-                $Userid = $_POST ['userid'];
-            }
-            if (empty($_POST['password'])) {
+            } else if (empty($_POST['password'])) {
                 $pass_error = "Password  is required";
 //        $msgEncoded2 = base64_encode($msg2);
 //        header("location:Adminlogin.php?msg2=" . $msgEncoded2);
             } else {
-                $Password = $_POST['password']; //Accesing input from the login form
+
+                $Userid = $_POST ['userid'];
+                $Password = $_POST['password'];
             }
         }
         ?>

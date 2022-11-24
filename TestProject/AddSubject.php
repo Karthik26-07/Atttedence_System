@@ -10,24 +10,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST["subjectname"])) {
         $nameErr = "Subject name is required";
-    } else {
-        $subname = $_POST['subjectname'];
-
-// check if name only contains letters and whitespace
-        if (!preg_match("/^[a-zA-Z ]*$/", $subname)) {
-            $nameErr = "Only alphabets and white space are allowed";
-        }
-    }
-    if (empty($_POST["subjectcode"])) {
+    } else if (!preg_match("/^[a-zA-Z ]*$/", $_POST["subjectname"])) {
+        $nameErr = "Only alphabets and white space are allowed";
+    } else if (empty($_POST["subjectcode"])) {
         $codeErr = "Subject code is required";
-    } else {
-        $subcode = $_POST['subjectcode'];
-    }
-
-    $subsem = $_POST['subsemester'];
-    if (empty($_POST["subdescription"])) {
+    } else if (empty($_POST["subdescription"])) {
         $desErr = "Subject description is required";
     } else {
+        $subname = $_POST['subjectname'];
+        $subcode = $_POST['subjectcode'];
+        $subsem = $_POST['subsemester'];
         $subdescription = $_POST['subdescription'];
     }
 }
@@ -116,7 +108,7 @@ if (isset($_POST['add'])) {
             echo "Error: " . $sql . "<br>" . $con->error;
         }
     } else {
-        
+
     }
 }
 ?>

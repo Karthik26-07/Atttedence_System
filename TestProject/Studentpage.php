@@ -39,72 +39,58 @@
 
         if (empty($_POST["name"])) {
             $nameErr = "Name is required";
-        } else {
-            $Name = $_POST["name"];
-            // check if name only contains letters and whitespace
-            if (!preg_match("/^[a-zA-Z ]*$/", $Name)) {
-                $nameErr = "Only alphabets and white space are allowed";
-            }
         }
-        if (empty($_POST["age"])) {
+        // check if name only contains letters and whitespace
+        else if (!preg_match("/^[a-zA-Z ]*$/", $_POST["name"])) {
+            $nameErr = "Only alphabets and white space are allowed";
+        } else if (empty($_POST["age"])) {
             $ageErr = "Age is required";
-        } else {
-            $Age = $_POST["age"];
-            // check if mobile no is well-formed
-            if (!preg_match("/^[0-9]*$/", $Age)) {
-                $ageErr = "Only numeric value is allowed.";
-            }
         }
-        if (empty($_POST["phno"])) {
+        // check if mobile no is well-formed
+        else if (!preg_match("/^[0-9]*$/", $_POST["age"])) {
+            $ageErr = "Only numeric value is allowed.";
+        } else if (empty($_POST["phno"])) {
             $mobilenoErr = "Phone no is required";
-        } else {
-            $Phonenumber = $_POST["phno"];
-            // check if mobile no is well-formed
-            if (!preg_match("/^[0-9]*$/", $Phonenumber)) {
-                $mobilenoErr = "Only numeric value is allowed.";
-            }
-            //check mobile no length should not be less and greator than 10
-            if (strlen($Phonenumber) != 10) {
-                $mobilenoErr = "Mobile no must contain 10 digits.";
-            }
         }
-        if (empty($_POST["email"])) {
+        // check if mobile no is well-formed
+        else if (!preg_match("/^[0-9]*$/", $_POST["phno"])) {
+            $mobilenoErr = "Only numeric value is allowed.";
+        }
+        //check mobile no length should not be less and greator than 10
+        else if (strlen($_POST["phno"]) != 10) {
+            $mobilenoErr = "Mobile no must contain 10 digits.";
+        } else if (empty($_POST["email"])) {
             $emailErr = "Email is required";
+        }
+        // check that the e-mail address is well-formed
+        else if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Invalid email format";
+        } else if (empty($_POST["p_phonenum"])) {
+            $parentphoneErr = "Parents phone number is required";
+        }
+        // check if mobile no is well-formed
+        else if (!preg_match("/^[0-9]*$/", $_POST["p_phonenum"])) {
+            $parentphoneErr = "Only numeric value is allowed.";
+        }
+        //check mobile no length should not be less and greator than 10
+        else if (strlen($_POST["p_phonenum"]) != 10) {
+            $parentphoneErr = "Mobile no must contain 10 digits.";
+        } else if (empty($_POST["address"])) {
+            $addErr = "Address is required";
+        } else if (empty($_POST["password"])) {
+            $passErr = "Password is required";
         } else {
+
+
+
+            $Name = $_POST["name"];
+            $Student_password = $_POST["password"];
+            $Address = $_POST["address"];
+            $Parentsphone = $_POST["p_phonenum"];
             $Email = $_POST["email"];
-            // check that the e-mail address is well-formed
-            if (!filter_var($Email, FILTER_VALIDATE_EMAIL)) {
-                $emailErr = "Invalid email format";
-//            }
-            }
-
-
-            if (empty($_POST["p_phonenum"])) {
-                $parentphoneErr = "Parents phone number is required";
-            } else {
-                $Parentsphone = $_POST["p_phonenum"];
-                // check if mobile no is well-formed
-                if (!preg_match("/^[0-9]*$/", $Parentsphone)) {
-                    $parentphoneErr = "Only numeric value is allowed.";
-                }
-                //check mobile no length should not be less and greator than 10
-                if (strlen($Parentsphone) != 10) {
-                    $parentphoneErr = "Mobile no must contain 10 digits.";
-                }
-            }
-            if (empty($_POST["address"])) {
-                $addErr = "Address is required";
-            } else {
-                $Address = $_POST["address"];
-            }
-
+            $Phonenumber = $_POST["phno"];
+            $Age = $_POST["age"];
             $Semister = $_POST["sem"];
-            if (empty($_POST["password"])) {
-                $passErr = "Password is required";
-            } else {
-                $Student_password = $_POST["password"];
-            }
-
 
 //
         }

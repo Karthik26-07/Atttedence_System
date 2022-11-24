@@ -27,13 +27,10 @@
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (empty($_POST['phone'])) {
                 $phone_error = " Phone number is Required";
-            } else {
-                $Phone = $_POST['phone'];
-            }
-            if (empty($_POST['password'])) {
+            } else if (empty($_POST['password'])) {
                 $pass1_error = "Password  is required";
             } else {
-
+                $Phone = $_POST['phone'];
                 $Pass = $_POST['password'];
             }
         }
@@ -68,7 +65,8 @@
             <div class="text-danger">
 
                 <?php
-                $msg = base64_decode(filter_input(INPUT_GET, 'msg')); {
+                $msg = base64_decode(filter_input(INPUT_GET, 'msg'));
+                {
 
                     if ($msg != "") {
                         echo $msg;

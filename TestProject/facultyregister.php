@@ -12,54 +12,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST["inputname"])) {
         $nameErr = "Name is required";
-    } else {
-        $R_Name = $_POST["inputname"];
-// check if name only contains letters and whitespace
-        if (!preg_match("/^[a-zA-Z ]*$/", $R_Name)) {
-            $nameErr = "Only alphabets and white space are allowed";
-        }
-    }
-
-    if (empty($_POST["inputphno"])) {
+    } else if (!preg_match("/^[a-zA-Z ]*$/", $_POST["inputname"])) {
+        $nameErr = "Only alphabets and white space are allowed";
+    } else if (empty($_POST["inputphno"])) {
         $mobilenoErr = "Phone no is required";
-    } else {
-        $R_Phonenumber = $_POST["inputphno"];
-// check if mobile no is well-formed
-        if (!preg_match("/^[0-9]*$/", $R_Phonenumber)) {
-            $mobilenoErr = "Only numeric value is allowed.";
-        }
-//check mobile no length should not be less and greator than 10
-        if (strlen($R_Phonenumber) != 10) {
-            $mobilenoErr = "Mobile no must contain 10 digits.";
-        }
-    }
-    if (empty($_POST["age"])) {
+    } else if (!preg_match("/^[0-9]*$/", $_POST["inputphno"])) {
+        $mobilenoErr = "Only numeric value is allowed.";
+    } else if (strlen($_POST["inputphno"]) != 10) {
+        $mobilenoErr = "Mobile no must contain 10 digits.";
+    } else if (empty($_POST["age"])) {
         $ageErr = "Age is required";
-    } else {
-        $R_Age = $_POST["age"];
-// check if mobile no is well-formed
-        if (!preg_match("/^[0-9]*$/", $R_Age)) {
-            $ageErr = "Only numeric value is allowed.";
-        }
-    }
-    if (empty($_POST["inputemail"])) {
+    } else if (!preg_match("/^[0-9]*$/", $_POST["age"])) {
+        $ageErr = "Only numeric value is allowed.";
+    } else if (empty($_POST["inputemail"])) {
         $emailErr = "Email is required";
-    } else {
-        $R_Email = $_POST["inputemail"];
-// check that the e-mail address is well-formed
-        if (!filter_var($R_Email, FILTER_VALIDATE_EMAIL)) {
-            $emailErr = "Invalid email format";
-        }
-    }
-
-    if (empty($_POST["inputaddress"])) {
+    } else if (!filter_var($_POST["inputemail"], FILTER_VALIDATE_EMAIL)) {
+        $emailErr = "Invalid email format";
+    } else if (empty($_POST["inputaddress"])) {
         $addErr = "Address is required";
-    } else {
-        $R_Address = $_POST["inputaddress"];
-    }
-    if (empty($_POST["inputpass"])) {
+    } else if (empty($_POST["inputpass"])) {
         $passErr = "Password is required";
     } else {
+        $R_Name = $_POST["inputname"];
+        $R_Phonenumber = $_POST["inputphno"];
+        $R_Age = $_POST["age"];
+        $R_Email = $_POST["inputemail"];
+        $R_Address = $_POST["inputaddress"];
         $R_Password = $_POST["inputpass"];
     }
 }

@@ -3,15 +3,13 @@ $phone_error = $pass1_error = $msg = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST['phonenum'])) {
         $phone_error = " Phone number is Required";
-    } else {
-        $Phones = $_POST['phonenum'];
-    }
-    if (empty($_POST['pass'])) {
+    } else if (empty($_POST['pass'])) {
         $pass1_error = "Password  is required";
 //        $msgEncoded2 = base64_encode($msg2);
 //        header("location:Adminlogin.php?msg2=" . $msgEncoded2);
     } else {
         $Passes = $_POST['pass'];
+        $Phones = $_POST['phonenum'];
 
 //Accesing input from the login form
     }
@@ -73,15 +71,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="text-danger">
 
                 <?php
-                $msg = base64_decode(filter_input(INPUT_GET, 'msg'));
-                {
+                $msg = base64_decode(filter_input(INPUT_GET, 'msg')); {
 
                     if ($msg != "") {
                         echo $msg;
                     }
                 }
                 ?>
-<?php // echo $msg;    ?>
+                <?php // echo $msg;    ?>
             </div>
             <button class="btn btn-primary my-2 btn-1g" name="login"type="submit">Login</button>
 
@@ -130,6 +127,6 @@ if (isset($_POST['login'])) {
         }
     }
 } else {
-    
+
 }
 ?>
