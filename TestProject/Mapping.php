@@ -50,7 +50,7 @@
 
 
 
-    </head
+        </head>
     <body>
 
 
@@ -96,7 +96,7 @@
                                 ?>
                                 <option value="<?php echo $row['subId']; ?> " ><?php echo $row['subName']; ?>[<?php echo $row['subCode']; ?>]</option>
 
-                            <?php } ?>
+                            <?php }?>
                         </select>
 
                     </div>
